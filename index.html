@@ -267,7 +267,11 @@
   </style>
 </head>
 <body>
-
+<video 
+  src="https://www.w3schools.com/html/mov_bbb.mp4" 
+  loop muted autoplay playsinline 
+  style="position: absolute; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; z-index: -1;">
+</video>
   <!-- Loader -->
   <div id="loader">
     <div class="loader-logo">IF <span>Baiano</span></div>
@@ -308,8 +312,8 @@
   "use strict";
 
   /* ── CONFIG ─────────────────────────────── */
-  const API_URL        = "https://ifbaiano.edu.br/portal/wp-json/wp/v2/posts?per_page=5&_embed";
-  const SLIDE_MS       = 9000;      // time per slide
+  const API_URL        = "https://ifbaiano.edu.br/portal/wp-json/wp/v2/posts?per_page=10&_embed";
+  const SLIDE_MS       = 15000;      // time per slide
   const REFRESH_MS     = 60 * 60 * 1000; // 60 min
   const FALLBACK_IMG   = "https://ifbaiano.edu.br/portal/wp-content/themes/ifbaiano/images/logo-if-baiano.png";
 
