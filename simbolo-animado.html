@@ -3,6 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IF Baiano – Animação com Transição</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #264929;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Fundo com gradiente pulsante */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, #235826 0%, #103a13 70%);
+      animation: bgPulse 3s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes bgPulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      width: min(60vmin, 480px);
+      height: min(60vmin, 480px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─── CONTROLE DE TRANSIÇÃO (CICLO DE 9 SEGUNDOS) ─── */
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Ciclo do SVG: 6s visível, 3s escondido */
+    .scene-svg {
+      animation: fadeScene1 9s infinite;
+    }
+
+    /* Ciclo da Imagem: 6s escondido, 3s visível */
+    .scene-img {
+      animation: fadeScene2 9s infinite;
+    }
+
+    /* Lógica da transição CSS - Porcentagens baseadas em 9 segundos
+       61% = ~5.5s | 67% = ~6.0s | 94% = ~8.5s | 100% = 9.0s 
+    */
+    @keyframes fadeScene1 {
+      0%, 61%   { opacity: 1; visibility: visible; transform: scale(1); }
+      67%, 94%  { opacity: 0; visibility: hidden;  transform: scale(0.9); }
+      100%      { opacity: 1; visibility: visible; transform: scale(1); }
+    }
+
+    @keyframes fadeScene2 {
+      0%, 61%   { opacity: 0; visibility: hidden;  transform: scale(0.9); }
+      67%, 94%  { opacity: 1; visibility: visible; transform: scale(1); }
+      100%      { opacity: 0; visibility: hidden;  transform: scale(0.9); }
+    }
+
+    /* ─── ANIMAÇÃO DO SEGUNDO ELEMENTO (TEXTO) ─── */
+    .scene-img img {
+      width: 90%; /* Ajuste a largura conforme necessário */
+      max-width: 450px;
+      height: auto;
+      /* Animação suave para a imagem durante os 3 segundos */
+      animation: floatImg 3s ease-in-out infinite; 
+    }
+
+    @keyframes floatImg {
+      0%, 100% { transform: translateY(0px) scale(1);    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
+      50%      { transform: translateY(-12px) scale(1.03); filter: drop-shadow(0 15px 25px rgba(255,255,255,0.15)); }
+    }
+
+    /* ─── ANIMAÇÕES DO SVG (MANTIDAS INTACTAS) ─── */
+    svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      animation: sway 6s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-2.5deg) scale(1); }
+      50%       { transform: rotate(2.5deg) scale(1.06); }
+    }
+
+    .green { fill: #359737; }
+    .red   { fill: #c91517; }
+
+    .circle, .sq1, .sq2, .sq3, .sq4,
+    .sq5, .sq6, .sq7, .sq8, .sq9 {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    @keyframes circlePulse {
+      0%   { transform: scale(1);    filter: drop-shadow(0 0 6px #c91517); }
+      35%  { transform: scale(1.35); filter: drop-shadow(0 0 28px #ff2222) drop-shadow(0 0 55px #ff000088); }
+      55%  { transform: scale(0.82); filter: drop-shadow(0 0 6px #c91517); }
+      75%  { transform: scale(1.15); filter: drop-shadow(0 0 18px #c91517); }
+      100% { transform: scale(1);    filter: drop-shadow(0 0 6px #c91517); }
+    }
+
+    .circle { animation: circlePulse 2s cubic-bezier(.36,.07,.19,.97) infinite; }
+
+    @keyframes squareWave {
+      0%   { transform: scale(1)    translateY(0px);   filter: drop-shadow(0 0 3px #35973766); }
+      22%  { transform: scale(1.22) translateY(-18px); filter: drop-shadow(0 0 28px #39c43bcc) brightness(1.5); }
+      42%  { transform: scale(0.85) translateY(6px);   filter: drop-shadow(0 0 5px #359737); }
+      62%  { transform: scale(1.08) translateY(-6px);  filter: drop-shadow(0 0 14px #35973799); }
+      82%  { transform: scale(0.97) translateY(2px);   filter: drop-shadow(0 0 4px #35973755); }
+      100% { transform: scale(1)    translateY(0px);   filter: drop-shadow(0 0 3px #35973766); }
+    }
+
+    .sq1 { animation: squareWave 1.98s ease-in-out 0.00s infinite; }
+    .sq2 { animation: squareWave 1.98s ease-in-out 0.22s infinite; }
+    .sq3 { animation: squareWave 1.98s ease-in-out 0.44s infinite; }
+    .sq4 { animation: squareWave 1.98s ease-in-out 0.66s infinite; }
+    .sq5 { animation: squareWave 1.98s ease-in-out 0.88s infinite; }
+    .sq6 { animation: squareWave 1.98s ease-in-out 1.10s infinite; }
+    .sq7 { animation: squareWave 1.98s ease-in-out 1.32s infinite; }
+    .sq8 { animation: squareWave 1.98s ease-in-out 1.54s infinite; }
+    .sq9 { animation: squareWave 1.98s ease-in-out 1.76s infinite; }
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    
+    <!-- PRIMEIRO ELEMENTO: SÍMBOLO ANIMADO -->
+    <div class="scene scene-svg">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 950">
+        <path class="green sq1" d="M556.585248,262.5347725c0,8.3319111-6.7798691,15.059269-15.0600586,15.059269h-124.9245758c-8.3323059,0-15.0584793-6.7273579-15.0584793-15.059269v-124.924181c0-8.3319111,6.7261734-15.1109905,15.0584793-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7790794,15.0600586,15.1109905v124.924181Z"/>
+        <path class="green sq2" d="M742.6834155,262.5347725c0,8.3319111-6.7798691,15.059269-15.0600586,15.059269h-124.9245758c-8.3323059,0-15.1105957-6.7273579-15.1105957-15.059269v-124.924181c0-8.3319111,6.7782898-15.1109905,15.1105957-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7790794,15.0600586,15.1109905v124.924181Z"/>
+        <path class="green sq3" d="M370.4712878,448.4987007c0,8.3836327-6.7798691,15.1113853-15.0600586,15.1113853h-124.9245758c-8.3323059,0-15.0584793-6.7277527-15.0584793-15.1113853v-124.8724594c0-8.3319111,6.7261734-15.1109905,15.0584793-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7790794,15.0600586,15.1109905v124.8724594Z"/>
+        <path class="green sq4" d="M556.585248,448.4987007c0,8.3836327-6.7798691,15.1113853-15.0600586,15.1113853h-124.9245758c-8.3323059,0-15.0584793-6.7277527-15.0584793-15.1113853v-124.8724594c0-8.3319111,6.7261734-15.1109905,15.0584793-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7790794,15.0600586,15.1109905v124.8724594Z"/>
+        <path class="green sq5" d="M370.4712878,634.720842c0,8.3319111-6.7798691,15.1113853-15.0600586,15.1113853h-124.9245758c-8.3323059,0-15.0584793-6.7794743-15.0584793-15.1113853v-124.8724594c0-8.3836327,6.7261734-15.1109905,15.0584793-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7273579,15.0600586,15.1109905v124.8724594Z"/>
+        <path class="green sq6" d="M556.585248,634.720842c0,8.3319111-6.7798691,15.1113853-15.0600586,15.1113853h-124.9245758c-8.3323059,0-15.0584793-6.7794743-15.0584793-15.1113853v-124.8724594c0-8.3836327,6.7261734-15.1109905,15.0584793-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7273579,15.0600586,15.1109905v124.8724594Z"/>
+        <path class="green sq7" d="M742.6834155,634.720842c0,8.3319111-6.7798691,15.1113853-15.0600586,15.1113853h-124.9245758c-8.3323059,0-15.1105957-6.7794743-15.1105957-15.1113853v-124.8724594c0-8.3836327,6.7782898-15.1109905,15.1105957-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7273579,15.0600586,15.1109905v124.8724594Z"/>
+        <path class="green sq8" d="M370.4712878,821.005365c0,8.3319111-6.7798691,15.1113853-15.0600586,15.1113853h-124.9245758c-8.3323059,0-15.0584793-6.7794743-15.0584793-15.1113853v-124.8724594c0-8.3319111,6.7261734-15.1109905,15.0584793-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7790794,15.0600586,15.1109905v124.8724594Z"/>
+        <path class="green sq9" d="M556.585248,821.005365c0,8.3319111-6.7798691,15.1113853-15.0600586,15.1113853h-124.9245758c-8.3323059,0-15.0584793-6.7794743-15.0584793-15.1113853v-124.8724594c0-8.3319111,6.7261734-15.1109905,15.0584793-15.1109905h124.9245758c8.2801895,0,15.0600586,6.7790794,15.0600586,15.1109905v124.8724594Z"/>
+        <path class="red circle" d="M378.2334719,200.0882774c0,47.0926895-38.1918411,85.2841358-85.2845306,85.2841358s-85.2845306-38.1914463-85.2845306-85.2841358c0-47.1440163,38.1918411-85.3354626,85.2845306-85.3354626s85.2845306,38.1914463,85.2845306,85.3354626"/>
+      </svg>
+    </div>
+
+    <!-- SEGUNDO ELEMENTO: TEXTO (IMAGEM) -->
+    <div class="scene scene-img">
+      <!-- Certifique-se de que a imagem está salva na mesma pasta com este nome: -->
+      <img src="logo-texto.png" alt="Letreiro IF Baiano">
+    </div>
+
+  </div>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IF Baiano – Símbolo Animado</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -116,3 +291,4 @@
   </div>
 </body>
 </html>
+ -->
